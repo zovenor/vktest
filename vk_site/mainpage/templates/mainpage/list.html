@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Your list</title>
+</head>
+<body>
+    <style>
+        body{
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+        }
+        body *{
+            margin: 20px;
+            color: black;
+            font-size: 20px;
+        }
+
+</style>
+    <a href="logout/">Logout</a>
+    <h1>Your list</h1>
+    <ul>
+        {% for el in list %}
+            <li><a href="{{ el.link }}">{{ el.link }}</a></li>
+        {% endfor %}
+    </ul>
+    <h1>Add a link</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="link">
+        <input type="submit">
+    </form>
+    {% for el in statuses %}
+        <h1>{{ el.1 }}</h1>
+        {% for el2 in el.0 %}
+            <p>{{el2}}</p>
+        {% endfor %}
+    {% endfor %}
+</body>
+</html>

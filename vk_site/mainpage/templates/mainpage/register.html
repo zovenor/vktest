@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Register</title>
+</head>
+<body>
+<style>
+        body{
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+        }
+        body *{
+            margin: 20px;
+            color: black;
+            font-size: 20px;
+        }
+
+</style>
+
+<form method="POST">
+    {% csrf_token %}
+    <input required type="text" name="name" placeholder="Name">
+    <input required type="password" name="password1" placeholder="Password1">
+    <input required type="password" name="password2" placeholder="Password2">
+    <input required type="submit">
+</form>
+</body>
+</html>
