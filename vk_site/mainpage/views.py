@@ -5,18 +5,46 @@ from django.contrib.auth import login, logout, authenticate
 from .models import ListOfUsersModel
 import pickle
 from django.conf import settings
+import datetime
+
+
+def get_list_of_filter(lst, date1, date2):
+    lst_new = []
+    for el in lst:
+        for el2 in el[0]:
+            if date1 <= el2[1] <= date2:
+                lst_new.append(el)
+                break
+    return lst_new
 
 
 def mainpage(request):
     data_url = str(f'{settings.BASE_DIR}/data.pickle')
     if request.user.is_authenticated:
         if request.method == 'POST':
-            link = request.POST['link']
-            ListOfUsersModel.objects.create(user=request.user, link=link)
-            return redirect('/')
+            if 'link' in request.POST:
+                link = request.POST['link']
+                ListOfUsersModel.objects.create(user=request.user, link=link)
+                return redirect('/')
+            else:
+                date1 = datetime.datetime(
+                    *[int(el) for el in request.POST['date1'].replace('T', '-').replace(':', '-').split('-')])
+                date2 = datetime.datetime(
+                    *[int(el) for el in request.POST['date2'].replace('T', '-').replace(':', '-').split('-')])
+                lst = ListOfUsersModel.objects.filter(user=request.user)
+                fileData = pickle.load(open(data_url, 'rb'))
+                statuses = [[fileData[el][::-1], lst.get(id=int(el)).link] for el in fileData if
+                            int(el) in [el.id for el in lst]]
+                data = {
+                    'list': ListOfUsersModel.objects.filter(user=request.user),
+                    'statuses': get_list_of_filter(statuses, date1, date2)
+                }
+                return render(request, 'mainpage/list.html', data)
+
         lst = ListOfUsersModel.objects.filter(user=request.user)
         fileData = pickle.load(open(data_url, 'rb'))
-        statuses = [[fileData[el][::-1], lst.get(id=int(el)).link] for el in fileData if int(el) in [el.id for el in lst]]
+        statuses = [[fileData[el][::-1], lst.get(id=int(el)).link] for el in fileData if
+                    int(el) in [el.id for el in lst]]
         print(statuses)
         data = {
             'list': lst,

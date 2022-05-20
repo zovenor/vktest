@@ -14,7 +14,7 @@
             height: 100vh;
             width: 100vw;
             align-items: center;
-            justify-content: center;
+
             flex-direction: column;
             margin: 0;
             padding: 0;
@@ -33,6 +33,14 @@
             <li><a href="{{ el.link }}">{{ el.link }}</a></li>
         {% endfor %}
     </ul>
+    <h1>Filter</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input name="date1" required type="datetime-local" placeholder="Date1">
+        <input name="date2" required type="datetime-local" placeholder="Date2">
+        <input type="submit">
+    </form>
+
     <h1>Add a link</h1>
     <form method="POST">
         {% csrf_token %}
